@@ -8,3 +8,7 @@ Column( dt_split, 3 ) << data type(numeric);
 Column( dt_split, 3 ) << modeling type("Continuous");
 
 dt_split<< Delete Columns (:Value);
+
+for(i=5, i<=ncol(), i++,
+	column(i) << data type(numeric);
+	column(i) << modeling type("Continuous"));
