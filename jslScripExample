@@ -1,0 +1,10 @@
+//jsl for post script 
+dt_stacked = currentdatatable();
+dt_split = split(split by(:TagName), Split(:vValue), group(:DateTime));
+close(data table(dt_stacked), nosave);
+
+Column("DateTime") <<data type(numeric, Format("yyyy-mm-ddThh:mm:ss")) <<Set Modeling Type("Continuous");
+Column( dt_split, 3 ) << data type(numeric);
+Column( dt_split, 3 ) << modeling type("Continuous");
+
+dt_split<< Delete Columns (:Value);
