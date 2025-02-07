@@ -1,0 +1,57 @@
+import urllib
+from sqlalchemy import create_engine
+import pandas as pd
+import time
+import datetime
+from datetime import timedelta
+from datetime import datetime
+
+Time1 = time.perf_counter()
+
+
+# Define the connection parameters for a trusted connection
+params = urllib.parse.quote_plus(
+    "DRIVER={SQL Server};"
+    "SERVER=servername;"
+    "DATABASE=Runtime;"
+    "Trusted_Connection=yes"
+)
+
+# Create the SQLAlchemy engine
+engine = create_engine(f"mssql+pyodbc:///?odbc_connect={params}")
+
+TagsOfInterest= ("[tagname1], [tagname2], [tagname3], [tagname5]"
+                "[tag3], [tag4]") //for second line
+
+Start = "2024-08-28 05:00:00"
+End = "2024-08-28 17:00:00"
+
+# Convert the string to a datetime object
+start_datetime = datetime.strptime(Start, '%Y-%m-%d %H:%M:%S')
+end_datetime = datetime.strptime(End, '%Y-%m-%d %H:%M:%S')
+
+
+EndNow = now.strftime("%Y-%m-%d %H:%M:%S")
+StartNow = before.strftime("%Y-%m-%d %H:%M:%S")
+ 
+CyclicRetrievalType="Cyclic"
+DeltaRetrievalType="Delta"
+InterpTypeO ="'StairStep'"
+IntervalTimeO ="60000"
+
+# Define your SQL query
+query = f"""
+SELECT * FROM OpenQuery(INSQL, 'SELECT DateTime, {TagsOfInterest}
+    FROM WideHistory
+    WHERE wwResolution = {IntervalTimeO}
+    AND wwRetrievalMode = "{DeltaRetrievalType}"
+    AND wwVersion = "Latest"
+    AND DateTime > "{start_datetime}"
+    AND DateTime < "{end_datetime}"')
+"""
+
+# Execute the query and store the result in a DataFrame
+df = pd.read_sql_query(query, engine)
+
+# Display the DataFrame
+df.head(10)
